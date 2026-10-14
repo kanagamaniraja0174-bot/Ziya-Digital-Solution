@@ -175,17 +175,16 @@ section {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--white);
-  box-shadow: 0 2px 18px rgba(11, 31, 69, 0.08);
-  border-bottom: 1px solid rgba(11, 31, 69, 0.06);
+  background: var(--navy);
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
   transition: background 0.35s ease, padding 0.35s ease, box-shadow 0.35s ease;
 }
 
 .site-header.scrolled {
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(11, 31, 69, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 8px 24px rgba(11, 31, 69, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.38);
 }
 
 .header-inner {
@@ -218,7 +217,7 @@ section {
   width: 46px;
   height: 46px;
   border-radius: 10px;
-  background: transparent;
+  background: var(--navy);
   padding: 0;
   object-fit: contain;
   transition: transform 0.3s ease;
@@ -229,7 +228,7 @@ section {
 }
 
 .brand-name {
-  color: var(--navy);
+  color: var(--white);
   font-weight: 700;
   font-size: 1.12rem;
   line-height: 1.15;
@@ -251,9 +250,9 @@ section {
 }
 
 .main-nav a {
-  color: var(--navy);
+  color: var(--white);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 500;
   padding: 6px 2px;
   position: relative;
   border-bottom: none;
@@ -299,7 +298,7 @@ section {
   display: block;
   width: 26px;
   height: 3px;
-  background: var(--navy);
+  background: var(--gold);
   margin: 5px 0;
   border-radius: 2px;
   transition: var(--transition);
@@ -1471,11 +1470,9 @@ section {
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--white);
-    border-bottom: 2px solid var(--gold);
-    box-shadow: 0 14px 28px rgba(11, 31, 69, 0.12);
+    background: var(--navy-dark);
     display: none;
-    padding: 16px 22px 24px;
+    padding: 12px 22px 22px;
   }
 
   .main-nav.open {
