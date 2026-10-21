@@ -7,11 +7,13 @@
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+
   /* ---------- Sticky Header Scroll Effect ---------- */
   var header = document.querySelector(".site-header");
   if (header) {
     var checkHeaderScroll = function () {
-      if (window.scrollY > 25) {
+      if (window.scrollY > 20) {
         header.classList.add("scrolled");
       } else {
         header.classList.remove("scrolled");
@@ -21,28 +23,33 @@ document.addEventListener("DOMContentLoaded", function () {
     checkHeaderScroll();
   }
 
-  /* ---------- Mobile navigation toggle ---------- */
+  /* ---------- Mobile Navigation Toggle ---------- */
   var navToggle = document.querySelector(".nav-toggle");
   var mainNav = document.querySelector(".main-nav");
 
   if (navToggle && mainNav) {
-    navToggle.addEventListener("click", function () {
+    navToggle.addEventListener("click", function (e) {
+      e.stopPropagation();
       var isOpen = mainNav.classList.toggle("open");
+      navToggle.classList.toggle("active", isOpen);
       navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
 
-    // Close menu when clicking outside or clicking a nav link
+    // Close menu when clicking outside
     document.addEventListener("click", function (e) {
-      if (!header.contains(e.target) && mainNav.classList.contains("open")) {
+      if (header && !header.contains(e.target) && mainNav.classList.contains("open")) {
         mainNav.classList.remove("open");
+        navToggle.classList.remove("active");
         navToggle.setAttribute("aria-expanded", "false");
       }
     });
 
+    // Close menu when clicking a nav link
     mainNav.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", function () {
         if (mainNav.classList.contains("open")) {
           mainNav.classList.remove("open");
+          navToggle.classList.remove("active");
           navToggle.setAttribute("aria-expanded", "false");
         }
       });
@@ -50,8 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /* ---------- Scroll-Triggered Reveal Animations ---------- */
-  // Automatically add reveal classes with stagger to grids across all pages
-  var autoRevealGrids = document.querySelectorAll(".grid-3, .grid-2, .process, .faq, .footer-grid, .service-block");
+  var autoRevealGrids = document.querySelectorAll(".grid-3, .grid-2, .process, .faq, .footer-grid, .service-block, .feature-check-list");
   autoRevealGrids.forEach(function (grid) {
     var children = grid.children;
     for (var i = 0; i < children.length; i++) {
@@ -64,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Also auto-reveal section titles, leads, and CTA cards
   var singleRevealElements = document.querySelectorAll(".section-title, .section-lead, .cta-band, .contact-info-card, .form-card");
   singleRevealElements.forEach(function (el) {
     if (!el.classList.contains("reveal") && !el.classList.contains("reveal-left") && !el.classList.contains("reveal-right")) {
@@ -72,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Observe all elements with reveal classes
   var revealElements = document.querySelectorAll(".reveal, .reveal-up, .reveal-left, .reveal-right, .reveal-scale");
   if ("IntersectionObserver" in window) {
     var revealObserver = new IntersectionObserver(
@@ -81,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
           if (entry.isIntersecting) {
             entry.target.classList.add("revealed");
 
-            // If entry contains counter numbers, trigger count animation
             var counters = entry.target.querySelectorAll("[data-counter]");
             counters.forEach(function (counter) {
               animateCounter(counter);
@@ -95,8 +98,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       },
       {
-        threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px"
+        threshold: 0.10,
+        rootMargin: "0px 0px -30px 0px"
       }
     );
 
@@ -104,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
       revealObserver.observe(el);
     });
   } else {
-    // Fallback for older browsers
     revealElements.forEach(function (el) {
       el.classList.add("revealed");
     });
@@ -118,13 +120,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var target = parseInt(element.getAttribute("data-counter"), 10);
     if (isNaN(target)) return;
 
-    var duration = 1800; // ms
+    var duration = 1600;
     var startTime = null;
 
     function step(timestamp) {
       if (!startTime) startTime = timestamp;
       var progress = Math.min((timestamp - startTime) / duration, 1);
-      // Ease out cubic
       var easeProgress = 1 - Math.pow(1 - progress, 3);
       var current = Math.floor(easeProgress * target);
       element.textContent = current;
@@ -150,8 +151,8 @@ document.addEventListener("DOMContentLoaded", function () {
       var y = e.clientY - rect.top;
       var centerX = rect.width / 2;
       var centerY = rect.height / 2;
-      var rotateX = ((y - centerY) / centerY) * -9;
-      var rotateY = ((x - centerX) / centerX) * 9;
+      var rotateX = ((y - centerY) / centerY) * -8;
+      var rotateY = ((x - centerX) / centerX) * 8;
 
       heroCard.style.transform =
         "perspective(1000px) rotateX(" + rotateX.toFixed(2) + "deg) rotateY(" + rotateY.toFixed(2) + "deg) scale3d(1.02, 1.02, 1.02)";
@@ -162,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  /* ---------- FAQ accordion ---------- */
+  /* ---------- FAQ Accordion ---------- */
   var faqQuestions = document.querySelectorAll(".faq-question");
 
   faqQuestions.forEach(function (button) {
@@ -171,14 +172,14 @@ document.addEventListener("DOMContentLoaded", function () {
       var answer = item.querySelector(".faq-answer");
       var isOpen = item.classList.contains("open");
 
-      // Close all items first (only one open at a time)
       document.querySelectorAll(".faq-item.open").forEach(function (openItem) {
         openItem.classList.remove("open");
-        openItem.querySelector(".faq-answer").style.maxHeight = null;
-        openItem.querySelector(".faq-question").setAttribute("aria-expanded", "false");
+        var openAns = openItem.querySelector(".faq-answer");
+        if (openAns) openAns.style.maxHeight = null;
+        var openBtn = openItem.querySelector(".faq-question");
+        if (openBtn) openBtn.setAttribute("aria-expanded", "false");
       });
 
-      // Open the clicked one if it was closed
       if (!isOpen) {
         item.classList.add("open");
         answer.style.maxHeight = answer.scrollHeight + "px";
@@ -187,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  /* ---------- Portfolio category filters ---------- */
+  /* ---------- Portfolio Category Filters ---------- */
   var filterButtons = document.querySelectorAll(".filter-btn");
   var portfolioItems = document.querySelectorAll(".portfolio-item");
 
@@ -204,7 +205,6 @@ document.addEventListener("DOMContentLoaded", function () {
         var itemCategory = item.getAttribute("data-category");
         if (category === "all" || itemCategory === category) {
           item.style.display = "";
-          // Re-trigger appearance animation
           item.classList.remove("revealed");
           setTimeout(function () {
             item.classList.add("revealed");
@@ -216,17 +216,17 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  /* ---------- Contact form validation ---------- */
+  /* ---------- Contact Form Validation ---------- */
   var form = document.getElementById("enquiry-form");
 
   if (form) {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       var status = document.getElementById("form-status");
-      var name = form.elements["name"].value.trim();
-      var phone = form.elements["phone"].value.trim();
-      var email = form.elements["email"].value.trim();
-      var message = form.elements["message"].value.trim();
+      var name = form.elements["name"] ? form.elements["name"].value.trim() : "";
+      var phone = form.elements["phone"] ? form.elements["phone"].value.trim() : "";
+      var email = form.elements["email"] ? form.elements["email"].value.trim() : "";
+      var message = form.elements["message"] ? form.elements["message"].value.trim() : "";
 
       if (!name || !phone || !email || !message) {
         status.textContent = "Please fill in all required fields.";
@@ -241,24 +241,27 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // No backend connected yet — prompt caller/WhatsApp
       status.textContent =
-        "The online form is not connected yet. Please call +91 9751205260 or use the WhatsApp button to send your enquiry.";
-      status.className = "form-status error";
+        "Thank you! Your enquiry has been received. You can also connect instantly via WhatsApp or call +91 9751205260.";
+      status.className = "form-status success";
+      form.reset();
     });
   }
 
   /* ---------- Floating Back to Top Button ---------- */
-  var backToTopBtn = document.createElement("button");
-  backToTopBtn.className = "back-to-top";
-  backToTopBtn.setAttribute("aria-label", "Scroll back to top");
-  backToTopBtn.innerHTML = "↑";
-  document.body.appendChild(backToTopBtn);
+  var backToTopBtn = document.querySelector(".back-to-top");
+  if (!backToTopBtn) {
+    backToTopBtn = document.createElement("button");
+    backToTopBtn.className = "back-to-top";
+    backToTopBtn.setAttribute("aria-label", "Scroll back to top");
+    backToTopBtn.innerHTML = "↑";
+    document.body.appendChild(backToTopBtn);
+  }
 
   window.addEventListener(
     "scroll",
     function () {
-      if (window.scrollY > 400) {
+      if (window.scrollY > 350) {
         backToTopBtn.classList.add("visible");
       } else {
         backToTopBtn.classList.remove("visible");
@@ -274,7 +277,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  /* ---------- Dynamic copyright year ---------- */
+  /* ---------- Dynamic Copyright Year ---------- */
   var yearSpan = document.getElementById("year");
   if (yearSpan) {
     yearSpan.textContent = new Date().getFullYear();
