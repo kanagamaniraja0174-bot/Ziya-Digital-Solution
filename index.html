@@ -5,19 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ziya Digital Solution — Web Design &amp; Digital Marketing in Karur</title>
   <meta name="description" content="Ziya Digital Solution helps businesses grow online with creative websites, digital marketing, SEO, social media and branding. Based in Karur, Tamil Nadu." />
-  <link rel="icon" href="logo.jpeg" type="image/jpeg" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/images/logo.jpeg" type="image/jpeg" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-  <!-- ============ Animated Background Canvas ============ -->
-  <canvas id="bg-canvas" class="site-bg-canvas" aria-hidden="true"></canvas>
-
   <!-- ============ Header ============ -->
-  <header class="site-header">
+  <header class="site-header header-white">
     <div class="header-inner">
       <a href="index.html" class="brand">
-        <img src="logo.png" alt="Ziya Digital Solution logo" />
+        <img src="assets/images/logo.png" alt="Ziya Digital Solution logo" />
         <span class="brand-name">Ziya Digital <span>Solution</span></span>
       </a>
       <nav class="main-nav" aria-label="Main navigation">
@@ -38,6 +35,11 @@
 
   <!-- ============ Hero ============ -->
   <section class="hero home-hero">
+    <!-- Animated canvas background -->
+    <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
+    <!-- Dark overlay for readability -->
+    <div class="hero-video-overlay" aria-hidden="true"></div>
+
     <div class="container hero-inner">
       <div class="hero-copy reveal-left">
         <div class="hero-badge">
@@ -59,7 +61,7 @@
       <div class="hero-image-wrap reveal-right">
         <div class="hero-glow-sphere"></div>
         <div class="hero-image-card">
-          <img src="hero-illustration.png" alt="Digital marketing, analytics, and web development illustration" />
+          <img src="assets/images/hero-illustration.png" alt="Digital marketing, analytics, and web development illustration" />
           <div class="hero-float-badge badge-top">
             <span class="badge-icon">🚀</span>
             <div>
@@ -85,7 +87,7 @@
       <div class="showcase-grid">
         <div class="showcase-visual reveal-left">
           <div class="showcase-card">
-            <img src="strategy-illustration.png" alt="Ziya Digital Solution digital marketing and mobile conversion strategy" />
+            <img src="assets/images/strategy-illustration.png" alt="Ziya Digital Solution digital marketing and mobile conversion strategy" />
           </div>
         </div>
         <div class="showcase-content reveal-right">
@@ -343,7 +345,7 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <img src="logo.png" alt="Ziya Digital Solution logo" />
+        <img src="assets/images/logo.png" alt="Ziya Digital Solution logo" />
         <p>Creative websites, strategic digital marketing, and powerful branding solutions from Karur, Tamil Nadu.</p>
       </div>
       <div>
@@ -375,7 +377,7 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
-  <script src="hero-canvas.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/hero-canvas.js"></script>
 </body>
 </html>
