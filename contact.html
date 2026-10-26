@@ -63,42 +63,72 @@
 
       <div class="form-card">
         <h2 class="section-title" style="font-size: 1.5rem;">Send an Enquiry</h2>
-        <!-- To make this form send emails, set action to your form service URL (see README.md) -->
-        <form id="enquiry-form" novalidate>
+        <!-- Connected to Formspree — submissions are emailed to Ziya Digital Solution -->
+        <form id="enquiry-form" novalidate
+              action="https://formspree.io/f/mppppqlv"
+              method="POST">
+
+          <!-- Formspree config fields (hidden) -->
+          <input type="hidden" name="_subject"  value="New Website Enquiry — Ziya Digital Solution" />
+          <input type="hidden" name="_replyto"  id="replyto-mirror" value="" />
+          <!-- Honeypot anti-spam (Formspree ignores non-empty _gotcha) -->
+          <input type="text"   name="_gotcha"   style="display:none" tabindex="-1" autocomplete="off" />
+
           <div class="form-row">
-            <label for="name">Full Name *</label>
-            <input type="text" id="name" name="name" required autocomplete="name" />
+            <label for="name">Full Name <span class="field-required" aria-hidden="true">*</span></label>
+            <input type="text" id="name" name="name"
+                   required autocomplete="name"
+                   aria-required="true" aria-describedby="name-error" />
+            <span class="field-error" id="name-error" role="alert"></span>
           </div>
+
           <div class="form-row">
             <label for="business">Business Name</label>
             <input type="text" id="business" name="business" autocomplete="organization" />
           </div>
+
           <div class="form-row">
-            <label for="phone">Phone Number *</label>
-            <input type="tel" id="phone" name="phone" required autocomplete="tel" />
+            <label for="phone">Phone Number <span class="field-required" aria-hidden="true">*</span></label>
+            <input type="tel" id="phone" name="phone"
+                   required autocomplete="tel"
+                   pattern="[+\d\s\-()]{7,20}"
+                   aria-required="true" aria-describedby="phone-error" />
+            <span class="field-error" id="phone-error" role="alert"></span>
           </div>
+
           <div class="form-row">
-            <label for="email">Email Address *</label>
-            <input type="email" id="email" name="email" required autocomplete="email" />
+            <label for="email">Email Address <span class="field-required" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email"
+                   required autocomplete="email"
+                   aria-required="true" aria-describedby="email-error" />
+            <span class="field-error" id="email-error" role="alert"></span>
           </div>
+
           <div class="form-row">
-            <label for="service">Service Required</label>
+            <label for="service">Service Interested In</label>
             <select id="service" name="service">
               <option value="">Select a service</option>
-              <option>Website Design &amp; Development</option>
-              <option>Digital Marketing</option>
-              <option>Social Media Marketing</option>
-              <option>Search Engine Optimisation (SEO)</option>
-              <option>Google Ads</option>
-              <option>Logo Design</option>
-              <option>Other</option>
+              <option value="Website Design &amp; Development">Website Design &amp; Development</option>
+              <option value="Digital Marketing">Digital Marketing</option>
+              <option value="Social Media Marketing">Social Media Marketing</option>
+              <option value="Search Engine Optimisation (SEO)">Search Engine Optimisation (SEO)</option>
+              <option value="Google Ads">Google Ads</option>
+              <option value="Logo Design">Logo Design</option>
+              <option value="Other">Other</option>
             </select>
           </div>
+
           <div class="form-row">
-            <label for="message">Project Description *</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
+            <label for="message">Project Description <span class="field-required" aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" rows="5"
+                      required
+                      aria-required="true" aria-describedby="message-error"></textarea>
+            <span class="field-error" id="message-error" role="alert"></span>
           </div>
-          <button type="submit" class="btn btn-gold">Send Enquiry</button>
+
+          <button type="submit" id="enquiry-submit" class="btn btn-gold"
+                  data-default-text="Send Enquiry">Send Enquiry</button>
+
           <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>

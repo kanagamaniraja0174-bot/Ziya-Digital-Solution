@@ -1117,10 +1117,64 @@ section {
   margin-top: 14px;
   font-size: 0.92rem;
   font-weight: 600;
+  padding: 0;
+  border-radius: 8px;
 }
 
 .form-status.error {
   color: #b3261e;
+  background: rgba(179, 38, 30, 0.07);
+  padding: 12px 16px;
+  border: 1px solid rgba(179, 38, 30, 0.2);
+}
+
+.form-status.success {
+  color: #166534;
+  background: rgba(22, 101, 52, 0.08);
+  padding: 12px 16px;
+  border: 1px solid rgba(22, 101, 52, 0.25);
+}
+
+/* Inline field validation error text */
+.field-error {
+  display: block;
+  font-size: 0.82rem;
+  color: #b3261e;
+  font-weight: 500;
+  margin-top: 4px;
+  min-height: 1.1em;
+}
+
+/* Red border when a field is invalid */
+.form-row input.input-invalid,
+.form-row textarea.input-invalid {
+  border-color: #b3261e;
+  box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.12);
+}
+
+/* Required asterisk colour */
+.field-required {
+  color: #b3261e;
+  margin-left: 2px;
+}
+
+/* Loading / disabled submit button */
+.btn-gold:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Mobile — contact grid stacks to single column */
+@media (max-width: 700px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-card {
+    padding: 24px 16px;
+  }
 }
 
 /* ---------- Footer ---------- */

@@ -216,35 +216,146 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  /* ---------- Contact form validation ---------- */
+  /* ---------- Contact form — Formspree submission ---------- */
   var form = document.getElementById("enquiry-form");
 
   if (form) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-      var status = document.getElementById("form-status");
-      var name = form.elements["name"].value.trim();
-      var phone = form.elements["phone"].value.trim();
-      var email = form.elements["email"].value.trim();
+    var submitBtn  = document.getElementById("enquiry-submit");
+    var statusEl   = document.getElementById("form-status");
+    var submitting = false; // duplicate-submission lock
+
+    /* Helper: show/clear inline field error */
+    function setFieldError(fieldId, message) {
+      var errorEl = document.getElementById(fieldId + "-error");
+      var inputEl = document.getElementById(fieldId);
+      if (!errorEl || !inputEl) return;
+      errorEl.textContent = message;
+      if (message) {
+        inputEl.classList.add("input-invalid");
+        inputEl.setAttribute("aria-invalid", "true");
+      } else {
+        inputEl.classList.remove("input-invalid");
+        inputEl.removeAttribute("aria-invalid");
+      }
+    }
+
+    /* Clear all inline errors */
+    function clearFieldErrors() {
+      ["name", "phone", "email", "message"].forEach(function (id) {
+        setFieldError(id, "");
+      });
+    }
+
+    /* Basic client-side validation; returns true if valid */
+    function validateForm() {
+      var valid = true;
+      var name    = form.elements["name"].value.trim();
+      var phone   = form.elements["phone"].value.trim();
+      var email   = form.elements["email"].value.trim();
       var message = form.elements["message"].value.trim();
 
-      if (!name || !phone || !email || !message) {
-        status.textContent = "Please fill in all required fields.";
-        status.className = "form-status error";
-        return;
+      clearFieldErrors();
+
+      if (!name) {
+        setFieldError("name", "Please enter your full name.");
+        valid = false;
+      }
+
+      if (!phone) {
+        setFieldError("phone", "Please enter your phone number.");
+        valid = false;
+      } else if (!/^[+\d\s\-()\.\[\]]{7,20}$/.test(phone)) {
+        setFieldError("phone", "Please enter a valid phone number.");
+        valid = false;
       }
 
       var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(email)) {
-        status.textContent = "Please enter a valid email address.";
-        status.className = "form-status error";
+      if (!email) {
+        setFieldError("email", "Please enter your email address.");
+        valid = false;
+      } else if (!emailPattern.test(email)) {
+        setFieldError("email", "Please enter a valid email address.");
+        valid = false;
+      }
+
+      if (!message) {
+        setFieldError("message", "Please describe your project or requirement.");
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    /* Mirror email value into _replyto hidden field */
+    var emailInput   = document.getElementById("email");
+    var replytoField = document.getElementById("replyto-mirror");
+    if (emailInput && replytoField) {
+      emailInput.addEventListener("input", function () {
+        replytoField.value = emailInput.value.trim();
+      });
+    }
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Prevent duplicate submissions
+      if (submitting) return;
+
+      // Run validation
+      if (!validateForm()) {
+        statusEl.textContent = "";
+        statusEl.className   = "form-status";
+        // Scroll to first error
+        var firstError = form.querySelector(".input-invalid");
+        if (firstError) firstError.focus();
         return;
       }
 
-      // No backend connected yet — prompt caller/WhatsApp
-      status.textContent =
-        "The online form is not connected yet. Please call +91 9751205260 or use the WhatsApp button to send your enquiry.";
-      status.className = "form-status error";
+      // Lock form & show loading state
+      submitting = true;
+      submitBtn.disabled   = true;
+      submitBtn.textContent = "Sending…";
+      statusEl.textContent  = "";
+      statusEl.className    = "form-status";
+
+      // Submit to Formspree via fetch (JSON response)
+      fetch(form.action, {
+        method: "POST",
+        body:    new FormData(form),
+        headers: { Accept: "application/json" }
+      })
+        .then(function (response) {
+          if (response.ok) {
+            // ✅ Success
+            statusEl.textContent = "✅ Thank you! Your enquiry has been sent. We'll get back to you within 24 hours.";
+            statusEl.className   = "form-status success";
+            form.reset();
+            if (replytoField) replytoField.value = "";
+            clearFieldErrors();
+          } else {
+            // Formspree returned an error response
+            return response.json().then(function (data) {
+              var msg = (data && data.errors && data.errors.length)
+                ? data.errors.map(function (e) { return e.message; }).join(", ")
+                : "Submission failed. Please try again or contact us directly.";
+              statusEl.textContent = "❌ " + msg;
+              statusEl.className   = "form-status error";
+            });
+          }
+        })
+        .catch(function () {
+          // Network / fetch error
+          statusEl.textContent = "❌ Network error. Please check your connection and try again, or call us at +91 9751205260.";
+          statusEl.className   = "form-status error";
+        })
+        .finally(function () {
+          // Restore button & release lock
+          submitting            = false;
+          submitBtn.disabled    = false;
+          submitBtn.textContent = submitBtn.getAttribute("data-default-text") || "Send Enquiry";
+          // Scroll status into view
+          statusEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
     });
   }
 
