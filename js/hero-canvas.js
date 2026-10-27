@@ -269,26 +269,29 @@
       ctx.restore();
     }
 
-    /* bar chart (lower-left) */
-    barTimer++;
-    if (barTimer % 90 === 0) {
-      for (var b = 0; b < barTargets.length; b++) {
-        barTargets[b] = 0.3 + Math.random() * 0.65;
+    /* On desktop/tablets (W > 768), render digital marketing analytics widgets; on mobile keep background clean */
+    if (W > 768) {
+      /* bar chart (lower-left) */
+      barTimer++;
+      if (barTimer % 90 === 0) {
+        for (var b = 0; b < barTargets.length; b++) {
+          barTargets[b] = 0.3 + Math.random() * 0.65;
+        }
       }
-    }
-    for (var b = 0; b < bars.length; b++) {
-      bars[b] += (barTargets[b] - bars[b]) * 0.04;
-    }
-    drawBarChart(W * 0.04, H * 0.60, 110, 70, bars, tick);
+      for (var b = 0; b < bars.length; b++) {
+        bars[b] += (barTargets[b] - bars[b]) * 0.04;
+      }
+      drawBarChart(W * 0.04, H * 0.60, 110, 70, bars, tick);
 
-    /* donut (upper-left) */
-    donutAngle = (donutAngle + 0.007) % (Math.PI * 2);
-    drawDonut(W * 0.07, H * 0.22, 38, donutAngle);
+      /* donut (upper-left) */
+      donutAngle = (donutAngle + 0.007) % (Math.PI * 2);
+      drawDonut(W * 0.07, H * 0.22, 38, donutAngle);
 
-    /* floating icon badges */
-    for (var ic = 0; ic < icons.length; ic++) {
-      icons[ic].t += 0.015;
-      drawIconBadge(icons[ic].label, W * icons[ic].x, H * icons[ic].y, icons[ic].t);
+      /* floating icon badges */
+      for (var ic = 0; ic < icons.length; ic++) {
+        icons[ic].t += 0.015;
+        drawIconBadge(icons[ic].label, W * icons[ic].x, H * icons[ic].y, icons[ic].t);
+      }
     }
 
     raf = requestAnimationFrame(draw);

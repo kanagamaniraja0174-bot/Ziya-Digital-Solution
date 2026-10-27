@@ -584,18 +584,60 @@ body .back-to-top {
 }
 
 /* Mobile responsiveness */
-@media (max-width: 480px) {
-  .ziya-chat-box {
-    width: calc(100vw - 20px);
-    right: -10px;
-    bottom: 74px;
-    height: 520px;
-    max-height: calc(100vh - 100px);
-    border-radius: 16px;
+@media (max-width: 640px) {
+  .ziya-chat-widget {
+    bottom: 16px;
+    right: 16px;
   }
 
   .ziya-chat-launcher {
     width: 56px;
     height: 56px;
+  }
+
+  .ziya-chat-box {
+    position: fixed;
+    bottom: 80px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+    height: calc(100vh - 100px);
+    max-height: 530px;
+    border-radius: 18px;
+    box-shadow: 0 16px 45px rgba(8, 23, 51, 0.45);
+  }
+
+  .ziya-chat-callout {
+    position: fixed;
+    bottom: 80px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-width: 320px;
+    margin-left: auto;
+  }
+
+  /* 16px input font size prevents iOS Safari auto-zoom */
+  .ziya-chat-input {
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  /* Adjust back-to-top button on mobile */
+  body .back-to-top {
+    right: 80px !important;
+    bottom: 20px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.1rem !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .ziya-chat-box {
+    bottom: 76px;
+    right: 8px;
+    left: 8px;
   }
 }

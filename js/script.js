@@ -31,9 +31,16 @@ document.addEventListener("DOMContentLoaded", function () {
       navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
     });
 
-    // Close menu when clicking outside or clicking a nav link
+    // Close menu when clicking outside, clicking a nav link, or pressing Escape
     document.addEventListener("click", function (e) {
-      if (!header.contains(e.target) && mainNav.classList.contains("open")) {
+      if (header && !header.contains(e.target) && mainNav.classList.contains("open")) {
+        mainNav.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && mainNav.classList.contains("open")) {
         mainNav.classList.remove("open");
         navToggle.setAttribute("aria-expanded", "false");
       }
