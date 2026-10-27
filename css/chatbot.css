@@ -1,0 +1,601 @@
+/* ============================================================
+   Ziya Digital Solution — Live AI Chatbot Widget Styles
+   Palette: Navy #0B1F45, Navy Dark #081733, Gold #D9A21B,
+            Gold Soft #f3d27a, White #FFFFFF, Cyan #38bdf8
+   ============================================================ */
+
+/* ---------- Chatbot Launcher Trigger ---------- */
+.ziya-chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+/* Adjust back-to-top button so it doesn't overlap launcher */
+body .back-to-top {
+  right: 92px !important;
+}
+
+@media (max-width: 640px) {
+  body .back-to-top {
+    right: 84px !important;
+    bottom: 24px !important;
+  }
+}
+
+.ziya-chat-launcher {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0B1F45 0%, #123061 50%, #D9A21B 100%);
+  border: 2px solid rgba(217, 162, 27, 0.7);
+  box-shadow: 0 10px 28px rgba(11, 31, 69, 0.4), 0 0 20px rgba(217, 162, 27, 0.35);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  outline: none;
+  padding: 0;
+}
+
+.ziya-chat-launcher:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 14px 34px rgba(11, 31, 69, 0.5), 0 0 30px rgba(217, 162, 27, 0.55);
+}
+
+.ziya-chat-launcher:active {
+  transform: scale(0.96);
+}
+
+.ziya-chat-launcher .launcher-icon-chat,
+.ziya-chat-launcher .launcher-icon-close {
+  position: absolute;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ziya-chat-launcher .launcher-icon-chat {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.ziya-chat-launcher .launcher-icon-close {
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ziya-chat-widget.open .ziya-chat-launcher .launcher-icon-chat {
+  opacity: 0;
+  transform: scale(0.5) rotate(90deg);
+}
+
+.ziya-chat-widget.open .ziya-chat-launcher .launcher-icon-close {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Pulsing Online Dot on Launcher */
+.ziya-launcher-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #081733;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+.ziya-launcher-badge::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  animation: launcherPulse 2s infinite;
+  opacity: 0.8;
+}
+
+@keyframes launcherPulse {
+  0% { transform: scale(0.9); opacity: 0.9; }
+  70% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Callout Bubble (Initial popup greeting) */
+.ziya-chat-callout {
+  position: absolute;
+  bottom: 74px;
+  right: 0;
+  width: 260px;
+  background: #ffffff;
+  color: #182235;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 12px 36px rgba(11, 31, 69, 0.22), 0 2px 10px rgba(0,0,0,0.06);
+  border: 1px solid rgba(217, 162, 27, 0.4);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.ziya-chat-callout.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.ziya-chat-callout-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #8b95a5;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+.ziya-chat-callout-close:hover {
+  color: #0B1F45;
+}
+
+.ziya-chat-callout strong {
+  color: #0B1F45;
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+/* ---------- Chatbot Window Box ---------- */
+.ziya-chat-box {
+  position: absolute;
+  bottom: 78px;
+  right: 0;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: 580px;
+  max-height: calc(100vh - 120px);
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(8, 23, 51, 0.38), 0 2px 14px rgba(217, 162, 27, 0.2);
+  border: 1px solid rgba(217, 162, 27, 0.35);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.92);
+  transform-origin: bottom right;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ziya-chat-widget.open .ziya-chat-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* Header */
+.ziya-chat-header {
+  background: linear-gradient(135deg, #081733 0%, #0B1F45 60%, #163d7a 100%);
+  color: #ffffff;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(217, 162, 27, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.ziya-chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ziya-chat-avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0B1F45, #D9A21B);
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.ziya-chat-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: contain;
+  background: #0B1F45;
+}
+
+.ziya-chat-avatar-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid #081733;
+}
+
+.ziya-chat-title-group h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ziya-chat-title-group h3 span {
+  color: #D9A21B;
+}
+
+.ziya-chat-subtitle {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.ziya-chat-subtitle-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.ziya-chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ziya-chat-action-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.ziya-chat-action-btn:hover {
+  background: rgba(217, 162, 27, 0.3);
+  border-color: #D9A21B;
+  color: #f3d27a;
+}
+
+/* Optional API Key banner inside header */
+.ziya-chat-key-panel {
+  background: #081733;
+  color: #ffffff;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  border-bottom: 1px solid rgba(217, 162, 27, 0.3);
+  display: none;
+}
+.ziya-chat-key-panel.show {
+  display: block;
+}
+.ziya-chat-key-panel input {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #D9A21B;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 0.8rem;
+  margin: 6px 0;
+  box-sizing: border-box;
+}
+
+/* Quick Prompt Suggestions Bar */
+.ziya-chat-quick-prompts {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  scrollbar-width: none;
+}
+
+.ziya-chat-quick-prompts::-webkit-scrollbar {
+  display: none;
+}
+
+.ziya-quick-chip {
+  flex-shrink: 0;
+  background: #ffffff;
+  border: 1px solid rgba(11, 31, 69, 0.18);
+  color: #0B1F45;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.ziya-quick-chip:hover {
+  background: #0B1F45;
+  color: #D9A21B;
+  border-color: #0B1F45;
+  transform: translateY(-1px);
+}
+
+/* Messages Body */
+.ziya-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fbfcfe;
+  scroll-behavior: smooth;
+}
+
+.ziya-chat-msg {
+  display: flex;
+  gap: 10px;
+  max-width: 88%;
+  animation: msgFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes msgFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ziya-chat-msg.bot {
+  align-self: flex-start;
+}
+
+.ziya-chat-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.ziya-chat-msg-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #0B1F45;
+  color: #D9A21B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1px solid rgba(217, 162, 27, 0.4);
+}
+
+.ziya-chat-msg.user .ziya-chat-msg-avatar {
+  background: #D9A21B;
+  color: #081733;
+}
+
+.ziya-chat-msg-bubble {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  word-break: break-word;
+  position: relative;
+}
+
+.ziya-chat-msg.bot .ziya-chat-msg-bubble {
+  background: #ffffff;
+  color: #182235;
+  border: 1px solid #e2e8f0;
+  border-top-left-radius: 4px;
+  box-shadow: 0 2px 8px rgba(11, 31, 69, 0.06);
+}
+
+.ziya-chat-msg.user .ziya-chat-msg-bubble {
+  background: linear-gradient(135deg, #0B1F45 0%, #163d7a 100%);
+  color: #ffffff;
+  border-top-right-radius: 4px;
+  box-shadow: 0 4px 14px rgba(11, 31, 69, 0.2);
+}
+
+.ziya-chat-msg-time {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  margin-top: 4px;
+  text-align: right;
+  display: block;
+}
+
+.ziya-chat-msg.user .ziya-chat-msg-time {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Buttons inside Bot Messages */
+.ziya-chat-action-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.ziya-chat-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f8fafc;
+  color: #0B1F45;
+  border: 1px solid #cbd5e1;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.ziya-chat-link-btn:hover {
+  background: #0B1F45;
+  color: #D9A21B;
+  border-color: #0B1F45;
+}
+
+.ziya-chat-link-btn.btn-wa {
+  background: #25d366;
+  color: #ffffff;
+  border-color: #25d366;
+}
+.ziya-chat-link-btn.btn-wa:hover {
+  background: #1eb856;
+}
+
+/* Typing Indicator Animation */
+.ziya-chat-typing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border-radius: 14px;
+  border-top-left-radius: 4px;
+  border: 1px solid #e2e8f0;
+  width: fit-content;
+  box-shadow: 0 2px 8px rgba(11, 31, 69, 0.06);
+}
+
+.ziya-typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #D9A21B;
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.ziya-typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+  background: #0B1F45;
+}
+
+.ziya-typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+  background: #38bdf8;
+}
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Chat Input Bar */
+.ziya-chat-input-area {
+  padding: 10px 14px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ziya-chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 25px;
+  font-size: 0.88rem;
+  outline: none;
+  color: #182235;
+  background: #f8fafc;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.ziya-chat-input:focus {
+  border-color: #D9A21B;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(217, 162, 27, 0.18);
+}
+
+.ziya-chat-send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0B1F45 0%, #D9A21B 100%);
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(11, 31, 69, 0.2);
+}
+
+.ziya-chat-send-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(217, 162, 27, 0.4);
+}
+
+.ziya-chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .ziya-chat-box {
+    width: calc(100vw - 20px);
+    right: -10px;
+    bottom: 74px;
+    height: 520px;
+    max-height: calc(100vh - 100px);
+    border-radius: 16px;
+  }
+
+  .ziya-chat-launcher {
+    width: 56px;
+    height: 56px;
+  }
+}
